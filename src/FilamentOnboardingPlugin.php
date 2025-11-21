@@ -27,7 +27,7 @@ class FilamentOnboardingPlugin implements Plugin
 
     public function register(Panel $panel): void
     {
-        if (!$this->enabled) {
+        if (! $this->enabled) {
             return;
         }
 
@@ -57,36 +57,42 @@ class FilamentOnboardingPlugin implements Plugin
     public function enabled(bool $condition = true): static
     {
         $this->enabled = $condition;
+
         return $this;
     }
 
     public function forceCompletion(bool $condition = true): static
     {
         $this->forceCompletion = $condition;
+
         return $this;
     }
 
     public function allowSkipping(bool $condition = true): static
     {
         $this->allowSkipping = $condition;
+
         return $this;
     }
 
     public function multiTenancy(bool $enabled = true): static
     {
         $this->multiTenancy = $enabled;
+
         return $this;
     }
 
     public function steps(array $steps): static
     {
         $this->steps = $steps;
+
         return $this;
     }
 
     public function redirectAfterCompletion(?string $url): static
     {
         $this->redirectAfterCompletion = $url;
+
         return $this;
     }
 

@@ -25,7 +25,7 @@ class OnboardingWizard extends Page implements HasForms
     protected static string $view = 'filament-onboarding::pages.onboarding-wizard';
 
     protected static bool $shouldRegisterNavigation = false;
-    
+
     protected static ?string $title = 'Welcome! Let\'s Get Started';
 
     public ?array $data = [];
@@ -61,7 +61,7 @@ class OnboardingWizard extends Page implements HasForms
                 Wizard::make($this->getWizardSteps())
                     ->submitAction(view('filament-onboarding::components.submit-button'))
                     ->skippable(config('filament-onboarding.allow_skipping', false))
-                    ->startOnStep($this->getCurrentStep())
+                    ->startOnStep($this->getCurrentStep()),
             ])
             ->statePath('data');
     }
@@ -268,6 +268,7 @@ class OnboardingWizard extends Page implements HasForms
     protected function getTimezoneOptions(): array
     {
         $timezones = timezone_identifiers_list();
+
         return array_combine($timezones, $timezones);
     }
 
@@ -321,9 +322,9 @@ class OnboardingWizard extends Page implements HasForms
     protected function handleTeamSetup(array $data): void
     {
         // Implement team creation or joining logic
-        if (($data['team_action'] ?? '') === 'create' && !empty($data['team_name'])) {
+        if (($data['team_action'] ?? '') === 'create' && ! empty($data['team_name'])) {
             // Create team logic here
-        } elseif (($data['team_action'] ?? '') === 'join' && !empty($data['invitation_code'])) {
+        } elseif (($data['team_action'] ?? '') === 'join' && ! empty($data['invitation_code'])) {
             // Join team logic here
         }
     }
@@ -339,7 +340,7 @@ class OnboardingWizard extends Page implements HasForms
 
     public function skipOnboarding(): void
     {
-        if (!config('filament-onboarding.allow_skipping', false)) {
+        if (! config('filament-onboarding.allow_skipping', false)) {
             return;
         }
 

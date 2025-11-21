@@ -12,14 +12,14 @@ class EnsureOnboardingComplete
     public function handle(Request $request, Closure $next): Response
     {
         // Check if onboarding is enabled
-        if (!config('filament-onboarding.enabled', true)) {
+        if (! config('filament-onboarding.enabled', true)) {
             return $next($request);
         }
 
         $user = Auth::user();
 
         // Allow guests
-        if (!$user) {
+        if (! $user) {
             return $next($request);
         }
 
@@ -38,8 +38,9 @@ class EnsureOnboardingComplete
 
         if ($forceCompletion) {
             // Check if user has completed or skipped onboarding
-            if (!$user->hasCompletedOnboarding() && !$user->hasSkippedOnboarding()) {
+            if (! $user->hasCompletedOnboarding() && ! $user->hasSkippedOnboarding()) {
                 $panelId = filament()->getCurrentPanel()->getId();
+
                 return redirect()->route("filament.{$panelId}.pages.onboarding-wizard");
             }
         }

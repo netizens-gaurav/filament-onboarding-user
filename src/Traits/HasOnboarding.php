@@ -97,7 +97,7 @@ trait HasOnboarding
     {
         $step = \Netizensgaurav\FilamentOnboarding\Models\OnboardingStep::where('key', $stepKey)->first();
 
-        if (!$step) {
+        if (! $step) {
             return;
         }
 

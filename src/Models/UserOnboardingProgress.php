@@ -52,6 +52,7 @@ class UserOnboardingProgress extends Model
     public function user(): BelongsTo
     {
         $userModel = config('filament-onboarding.user_model', 'App\\Models\\User');
+
         return $this->belongsTo($userModel);
     }
 
@@ -63,6 +64,7 @@ class UserOnboardingProgress extends Model
     public function team(): BelongsTo
     {
         $teamModel = config('filament-onboarding.multi_tenancy.team_model', 'App\\Models\\Team');
+
         return $this->belongsTo($teamModel);
     }
 
