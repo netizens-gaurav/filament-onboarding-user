@@ -1,29 +1,27 @@
 {
-    "name": ":vendor_slug/:package_slug",
-    "description": ":package_description",
+    "name": "netizens-gaurav/filament-onboarding",
+    "description": "A comprehensive onboarding solution for Filament applications with support for both single-tenant and multi-tenant SaaS platforms",
     "keywords": [
-        ":vendor_name",
+        "netizens-gaurav",
         "laravel",
-        ":package_slug"
+        "filament-onboarding"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/netizens-gaurav/filament-onboarding",
     "support": {
-        "issues": "https://github.com/:vendor_slug/:package_slug/issues",
-        "source": "https://github.com/:vendor_slug/:package_slug"
+        "issues": "https://github.com/netizens-gaurav/filament-onboarding/issues",
+        "source": "https://github.com/netizens-gaurav/filament-onboarding"
     },
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Gaurav Vaishnav",
+            "email": "gaurav.v@netizens.email",
             "role": "Developer"
         }
     ],
     "require": {
         "php": "^8.1",
         "filament/filament": "^3.0",
-        "filament/forms": "^3.0",
-        "filament/tables": "^3.0",
         "spatie/laravel-package-tools": "^1.15.0"
     },
     "require-dev": {
@@ -36,18 +34,17 @@
         "pestphp/pest-plugin-laravel": "^2.0",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan-deprecation-rules": "^1.0",
-        "phpstan/phpstan-phpunit": "^1.0",
-        "spatie/laravel-ray": "^1.26"
+        "phpstan/phpstan-phpunit": "^1.0"
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src/",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories/"
+            "Netizensgaurav\\FilamentOnboarding\\": "src/",
+            "Netizensgaurav\\FilamentOnboarding\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests/"
+            "Netizensgaurav\\FilamentOnboarding\\Tests\\": "tests/"
         }
     },
     "scripts": {
@@ -67,10 +64,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
+                "Netizensgaurav\\FilamentOnboarding\\FilamentOnboardingServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "VendorName\\Skeleton\\Facades\\Skeleton"
+                "FilamentOnboarding": "Netizensgaurav\\FilamentOnboarding\\Facades\\FilamentOnboarding"
             }
         }
     },
