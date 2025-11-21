@@ -1,0 +1,35 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        $tableName = config('filament-onboarding.tables.onboarding_steps', 'onboarding_steps');
+
+        Schema::create($tableName, function (Blueprint $table) {
+            $table->id();
+            $table->string('key')->unique()->comment('Unique identifier for the step');
+            $table->string('title')->comment('Display title of the step');
+            $table->text('description')->nullable()->comment('Description of what the step involves');
+            $table->integer('order')->default(0)->comment('Order in which steps appear');
+            $table->boolean('required')->default(true)->comment('Whether step completion is required');
+            $table->boolean('is_active')->default(true)->comment('Whether step is currently active');
+            $table->json('config')->nullable()->comment('Additional configuration data');
+            $table->timestamps();
+
+            // Indexes for better query performance
+            $table->index(['is_active', 'order'], 'active_order_index');
+            $table->index('key', 'step_key_index');
+        });
+    }
+
+    public function down(): void
+    {
+        $tableName = config('filament-onboarding.tables.onboarding_steps', 'onboarding_steps');
+        Schema::dropIfExists($tableName);
+    }
+};

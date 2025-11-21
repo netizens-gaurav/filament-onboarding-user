@@ -1,0 +1,50 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        $tableName = config('filament-onboarding.tables.user_onboarding_progress', 'user_onboarding_progress');
+
+        Schema::create($tableName, function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')
+                ->constrained('users')
+                ->cascadeOnDelete()
+                ->comment('Reference to the user');
+
+            $table->foreignId('onboarding_step_id')
+                ->constrained('onboarding_steps')
+                ->cascadeOnDelete()
+                ->comment('Reference to the onboarding step');
+
+            $table->foreignId('team_id')
+                ->nullable()
+                ->constrained('teams')
+                ->cascadeOnDelete()
+                ->comment('Reference to team (for multi-tenancy)');
+
+            $table->boolean('completed')->default(false)->comment('Whether step is completed');
+            $table->timestamp('completed_at')->nullable()->comment('When the step was completed');
+            $table->json('data')->nullable()->comment('Additional data stored for this step');
+            $table->timestamps();
+
+            // Composite unique index to prevent duplicate progress entries
+            $table->unique(['user_id', 'onboarding_step_id', 'team_id'], 'user_step_team_unique');
+
+            // Additional indexes for better query performance
+            $table->index(['user_id', 'completed'], 'user_completed_index');
+            $table->index('team_id', 'team_index');
+        });
+    }
+
+    public function down(): void
+    {
+        $tableName = config('filament-onboarding.tables.user_onboarding_progress', 'user_onboarding_progress');
+        Schema::dropIfExists($tableName);
+    }
+};
