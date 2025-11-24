@@ -18,7 +18,7 @@ use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 class FilamentOnboardingServiceProvider extends PackageServiceProvider
 {
-    public static string $name = 'filament-onboarding';
+    public static string $name = 'filament-onboarding-user';
 
     public static string $viewNamespace = 'filament-onboarding';
 
@@ -36,7 +36,7 @@ class FilamentOnboardingServiceProvider extends PackageServiceProvider
                     ->publishConfigFile()
                     ->publishMigrations()
                     ->askToRunMigrations()
-                    ->askToStarRepoOnGitHub('netizens-gaurav/filament-onboarding');
+                    ->askToStarRepoOnGitHub('netizens-gaurav/filament-onboarding-user');
             });
 
         $configFileName = $package->shortName();
@@ -58,7 +58,12 @@ class FilamentOnboardingServiceProvider extends PackageServiceProvider
         }
     }
 
-    public function packageRegistered(): void {}
+    public function packageRegistered(): void
+    {
+        $this->app->singleton(FilamentOnboarding::class, function () {
+            return new FilamentOnboarding();
+        });
+    }
 
     public function packageBooted(): void
     {
@@ -91,7 +96,7 @@ class FilamentOnboardingServiceProvider extends PackageServiceProvider
 
     protected function getAssetPackageName(): ?string
     {
-        return 'netizens-gaurav/filament-onboarding';
+        return 'netizens-gaurav/filament-onboarding-user';
     }
 
     /**
@@ -99,11 +104,21 @@ class FilamentOnboardingServiceProvider extends PackageServiceProvider
      */
     protected function getAssets(): array
     {
-        return [
-            // AlpineComponent::make('filament-onboarding', __DIR__ . '/../resources/dist/components/filament-onboarding.js'),
-            Css::make('filament-onboarding-styles', __DIR__ . '/../resources/dist/filament-onboarding.css'),
-            Js::make('filament-onboarding-scripts', __DIR__ . '/../resources/dist/filament-onboarding.js'),
-        ];
+        $assets = [];
+
+        $cssPath = __DIR__ . '/../resources/dist/filament-onboarding.css';
+        $jsPath = __DIR__ . '/../resources/dist/filament-onboarding.js';
+
+        // Only register assets if they exist
+        if (file_exists($cssPath)) {
+            $assets[] = Css::make('filament-onboarding-styles', $cssPath);
+        }
+
+        if (file_exists($jsPath)) {
+            $assets[] = Js::make('filament-onboarding-scripts', $jsPath);
+        }
+
+        return $assets;
     }
 
     /**
@@ -146,7 +161,9 @@ class FilamentOnboardingServiceProvider extends PackageServiceProvider
     protected function getMigrations(): array
     {
         return [
-            'create_filament-onboarding_table',
+            'create_onboarding_steps_table',
+            'create_user_onboarding_progress_table',
+            'add_onboarding_columns_to_users_table',
         ];
     }
 }
