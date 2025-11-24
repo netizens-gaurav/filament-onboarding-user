@@ -2,7 +2,6 @@
 
 namespace Netizensgaurav\FilamentOnboarding;
 
-use Filament\Support\Assets\AlpineComponent;
 use Filament\Support\Assets\Asset;
 use Filament\Support\Assets\Css;
 use Filament\Support\Assets\Js;
@@ -61,7 +60,7 @@ class FilamentOnboardingServiceProvider extends PackageServiceProvider
     public function packageRegistered(): void
     {
         $this->app->singleton(FilamentOnboarding::class, function () {
-            return new FilamentOnboarding();
+            return new FilamentOnboarding;
         });
     }
 
