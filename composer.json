@@ -1,15 +1,19 @@
 {
-    "name": "netizens-gaurav/filament-onboarding",
+    "name": "netizens-gaurav/filament-onboarding-user",
     "description": "A comprehensive onboarding solution for Filament applications with support for both single-tenant and multi-tenant SaaS platforms",
     "keywords": [
         "netizens-gaurav",
         "laravel",
-        "filament-onboarding"
+        "filament",
+        "filament-onboarding",
+        "onboarding",
+        "saas",
+        "user-onboarding"
     ],
-    "homepage": "https://github.com/netizens-gaurav/filament-onboarding",
+    "homepage": "https://github.com/netizens-gaurav/filament-onboarding-user",
     "support": {
-        "issues": "https://github.com/netizens-gaurav/filament-onboarding/issues",
-        "source": "https://github.com/netizens-gaurav/filament-onboarding"
+        "issues": "https://github.com/netizens-gaurav/filament-onboarding-user/issues",
+        "source": "https://github.com/netizens-gaurav/filament-onboarding-user"
     },
     "license": "MIT",
     "authors": [
@@ -70,6 +74,9 @@
             "aliases": {
                 "FilamentOnboarding": "Netizensgaurav\\FilamentOnboarding\\Facades\\FilamentOnboarding"
             }
+        },
+        "branch-alias": {
+            "dev-main": "1.0-dev"
         }
     },
     "minimum-stability": "dev",
