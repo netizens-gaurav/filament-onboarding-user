@@ -10,15 +10,18 @@ class FilamentOnboardingPlugin implements Plugin
 {
     protected bool $enabled = true;
 
-    protected bool $forceCompletion = true;
+    protected bool $mandatoryOnboarding = false;
 
-    protected bool $allowSkipping = false;
+    protected bool $skippable = false;
 
-    protected bool $multiTenancy = false;
+    protected ?string $onboardingPage = null;
 
-    protected array $steps = [];
+    protected ?string $redirectTo = null;
 
-    protected ?string $redirectAfterCompletion = null;
+    public static function make(): static
+    {
+        return app(static::class);
+    }
 
     public function getId(): string
     {
@@ -31,8 +34,10 @@ class FilamentOnboardingPlugin implements Plugin
             return;
         }
 
+        $pageClass = $this->onboardingPage ?? OnboardingWizard::class;
+
         $panel->pages([
-            OnboardingWizard::class,
+            $pageClass,
         ]);
     }
 
@@ -41,19 +46,9 @@ class FilamentOnboardingPlugin implements Plugin
         //
     }
 
-    public static function make(): static
-    {
-        return app(static::class);
-    }
-
-    public static function get(): static
-    {
-        /** @var static $plugin */
-        $plugin = filament(app(static::class)->getId());
-
-        return $plugin;
-    }
-
+    /**
+     * Enable/disable the onboarding
+     */
     public function enabled(bool $condition = true): static
     {
         $this->enabled = $condition;
@@ -61,38 +56,39 @@ class FilamentOnboardingPlugin implements Plugin
         return $this;
     }
 
-    public function forceCompletion(bool $condition = true): static
+    /**
+     * Force users to complete onboarding
+     */
+    public function mandatoryOnboarding(bool $condition = true): static
     {
-        $this->forceCompletion = $condition;
-
+        $this->mandatoryOnboarding = $condition;
         return $this;
     }
 
-    public function allowSkipping(bool $condition = true): static
+    /**
+     * Allow users to skip onboarding
+     */
+    public function skippable(bool $condition = true): static
     {
-        $this->allowSkipping = $condition;
-
+        $this->skippable = $condition;
         return $this;
     }
 
-    public function multiTenancy(bool $enabled = true): static
+    /**
+     * Set custom onboarding page class
+     */
+    public function onboardingPage(string $pageClass): static
     {
-        $this->multiTenancy = $enabled;
-
+        $this->onboardingPage = $pageClass;
         return $this;
     }
 
-    public function steps(array $steps): static
+    /**
+     * Set redirect URL after onboarding completion
+     */
+    public function afterOnboardingRedirectTo(string $url): static
     {
-        $this->steps = $steps;
-
-        return $this;
-    }
-
-    public function redirectAfterCompletion(?string $url): static
-    {
-        $this->redirectAfterCompletion = $url;
-
+        $this->redirectTo = $url;
         return $this;
     }
 
@@ -101,28 +97,18 @@ class FilamentOnboardingPlugin implements Plugin
         return $this->enabled;
     }
 
-    public function shouldForceCompletion(): bool
+    public function isMandatory(): bool
     {
-        return $this->forceCompletion;
+        return $this->mandatoryOnboarding;
     }
 
-    public function canSkip(): bool
+    public function isSkippable(): bool
     {
-        return $this->allowSkipping;
-    }
-
-    public function isMultiTenancy(): bool
-    {
-        return $this->multiTenancy;
-    }
-
-    public function getSteps(): array
-    {
-        return $this->steps ?: config('filament-onboarding.steps', []);
+        return $this->skippable;
     }
 
     public function getRedirectUrl(): ?string
     {
-        return $this->redirectAfterCompletion ?? config('filament-onboarding.redirect.after_completion');
+        return $this->redirectTo;
     }
 }
