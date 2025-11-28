@@ -17,7 +17,7 @@ use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 class FilamentOnboardingServiceProvider extends PackageServiceProvider
 {
-    public static string $name = 'filament-onboarding-user';
+    public static string $name = 'filament-onboarding';
 
     public static string $viewNamespace = 'filament-onboarding';
 
