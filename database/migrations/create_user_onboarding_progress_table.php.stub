@@ -8,43 +8,52 @@ return new class extends Migration
 {
     public function up(): void
     {
-        $tableName = config('filament-onboarding.tables.user_onboarding_progress', 'user_onboarding_progress');
+        $tableName = config('filament-onboarding.tables.user_onboarding_progress');
+        $tenantTable = config('filament-onboarding.multi_tenancy.tenant_table');
+        $tenantColumn = config('filament-onboarding.multi_tenancy.tenant_column', 'tenant_id');
+        $tenantFk = config('filament-onboarding.multi_tenancy.enable_tenant_fk', true);
 
-        Schema::create($tableName, function (Blueprint $table) {
+        Schema::create($tableName, function (Blueprint $table) use ($tenantColumn) {
             $table->id();
+
             $table->foreignId('user_id')
                 ->constrained('users')
-                ->cascadeOnDelete()
-                ->comment('Reference to the user');
+                ->cascadeOnDelete();
 
             $table->foreignId('onboarding_step_id')
                 ->constrained('onboarding_steps')
-                ->cascadeOnDelete()
-                ->comment('Reference to the onboarding step');
+                ->cascadeOnDelete();
 
-            $table->foreignId('team_id')
+            // Always create tenant column (nullable)
+            $table->unsignedBigInteger($tenantColumn)
                 ->nullable()
-                ->constrained('teams')
-                ->cascadeOnDelete()
-                ->comment('Reference to team (for multi-tenancy)');
+                ->comment('Tenant reference (team/company/etc.)');
 
-            $table->boolean('completed')->default(false)->comment('Whether step is completed');
-            $table->timestamp('completed_at')->nullable()->comment('When the step was completed');
-            $table->json('data')->nullable()->comment('Additional data stored for this step');
+            $table->boolean('completed')->default(false);
+            $table->timestamp('completed_at')->nullable();
+            $table->json('data')->nullable();
             $table->timestamps();
+        });
 
-            // Composite unique index to prevent duplicate progress entries
-            $table->unique(['user_id', 'onboarding_step_id', 'team_id'], 'user_step_team_unique');
+        // Add FK only if table exists and FK enabled
+        if ($tenantTable && Schema::hasTable($tenantTable) && $tenantFk) {
+            Schema::table($tableName, function (Blueprint $table) use ($tenantTable, $tenantColumn) {
+                $table->foreign($tenantColumn)
+                    ->references('id')
+                    ->on($tenantTable)
+                    ->cascadeOnDelete();
+            });
+        }
 
-            // Additional indexes for better query performance
-            $table->index(['user_id', 'completed'], 'user_completed_index');
-            $table->index('team_id', 'team_index');
+        Schema::table($tableName, function (Blueprint $table) use ($tenantColumn) {
+            $table->unique(['user_id', 'onboarding_step_id', $tenantColumn], 'user_step_tenant_unique');
+            $table->index([$tenantColumn], 'tenant_index');
         });
     }
 
     public function down(): void
     {
-        $tableName = config('filament-onboarding.tables.user_onboarding_progress', 'user_onboarding_progress');
+        $tableName = config('filament-onboarding.tables.user_onboarding_progress');
         Schema::dropIfExists($tableName);
     }
 };
