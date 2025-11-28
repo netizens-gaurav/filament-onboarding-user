@@ -62,6 +62,7 @@ class FilamentOnboardingPlugin implements Plugin
     public function mandatoryOnboarding(bool $condition = true): static
     {
         $this->mandatoryOnboarding = $condition;
+
         return $this;
     }
 
@@ -71,6 +72,7 @@ class FilamentOnboardingPlugin implements Plugin
     public function skippable(bool $condition = true): static
     {
         $this->skippable = $condition;
+
         return $this;
     }
 
@@ -80,6 +82,7 @@ class FilamentOnboardingPlugin implements Plugin
     public function onboardingPage(string $pageClass): static
     {
         $this->onboardingPage = $pageClass;
+
         return $this;
     }
 
@@ -89,6 +92,7 @@ class FilamentOnboardingPlugin implements Plugin
     public function afterOnboardingRedirectTo(string $url): static
     {
         $this->redirectTo = $url;
+
         return $this;
     }
 

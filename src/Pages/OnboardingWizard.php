@@ -45,7 +45,7 @@ class OnboardingWizard extends Page implements HasForms
             ->schema([
                 Wizard::make($this->getWizardSteps())
                     ->submitAction(view('filament-onboarding::components.submit-button'))
-                    ->skippable($this->canSkip())
+                    ->skippable($this->canSkip()),
             ])
             ->statePath('data');
     }
@@ -157,7 +157,7 @@ class OnboardingWizard extends Page implements HasForms
      */
     public function skipOnboarding(): void
     {
-        if (!$this->canSkip()) {
+        if (! $this->canSkip()) {
             return;
         }
 
