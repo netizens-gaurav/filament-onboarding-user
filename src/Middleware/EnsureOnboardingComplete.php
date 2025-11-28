@@ -20,12 +20,12 @@ class EnsureOnboardingComplete
         $user = Auth::user();
 
         // Allow guests
-        if (!$user) {
+        if (! $user) {
             return $next($request);
         }
 
         // Check if user model has HasOnboarding trait
-        if (!method_exists($user, 'hasCompletedOnboarding')) {
+        if (! method_exists($user, 'hasCompletedOnboarding')) {
             return $next($request);
         }
 
@@ -45,7 +45,7 @@ class EnsureOnboardingComplete
 
         if ($plugin->isMandatory()) {
             // Check if user has completed or skipped onboarding
-            if (!$user->hasCompletedOnboarding() && !$user->hasSkippedOnboarding()) {
+            if (! $user->hasCompletedOnboarding() && ! $user->hasSkippedOnboarding()) {
                 $panelId = filament()->getCurrentPanel()?->getId();
 
                 if ($panelId) {
