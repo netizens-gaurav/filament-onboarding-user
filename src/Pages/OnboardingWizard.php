@@ -2,23 +2,28 @@
 
 namespace Netizensgaurav\FilamentOnboarding\Pages;
 
-use Filament\Forms\Components\Section;
+use BackedEnum;
+use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Wizard;
+use Filament\Forms\Components\ViewField;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Filament\Schemas\Components\Section;
 use Illuminate\Support\Facades\Auth;
+use Filament\Schemas\Components\Wizard;
+use Filament\Schemas\Components\Wizard\Step;
+use Illuminate\Support\HtmlString;
 
 class OnboardingWizard extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rocket-launch';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;
 
-    protected static string $view = 'filament-onboarding::pages.onboarding-wizard';
+    protected string $view = 'filament-onboarding::pages.onboarding-wizard';
 
     protected static bool $shouldRegisterNavigation = false;
 
@@ -39,12 +44,12 @@ class OnboardingWizard extends Page implements HasForms
         ]);
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Wizard::make($this->getWizardSteps())
-                    ->submitAction(view('filament-onboarding::components.submit-button'))
+                    ->submitAction(new HtmlString(view('filament-onboarding::components.submit-button')->render()))
                     ->skippable($this->canSkip()),
             ])
             ->statePath('data');
@@ -56,7 +61,7 @@ class OnboardingWizard extends Page implements HasForms
     protected function getWizardSteps(): array
     {
         return [
-            Wizard\Step::make('profile')
+            Step::make('profile')
                 ->label('Complete Your Profile')
                 ->icon('heroicon-o-user')
                 ->description('Just a few details to get started')
@@ -84,9 +89,9 @@ class OnboardingWizard extends Page implements HasForms
                 ->schema([
                     Section::make()
                         ->schema([
-                            \Filament\Forms\Components\Placeholder::make('completion')
-                                ->content(view('filament-onboarding::components.completion-message'))
-                                ->columnSpanFull(),
+                            ViewField::make('completion')
+                                ->view('filament-onboarding::components.completion-message')
+                                ->columnSpanFull()
                         ]),
                 ]),
         ];
@@ -118,7 +123,6 @@ class OnboardingWizard extends Page implements HasForms
 
             // Redirect
             $this->redirect($this->getRedirectUrl());
-
         } catch (\Exception $e) {
             Notification::make()
                 ->danger()
