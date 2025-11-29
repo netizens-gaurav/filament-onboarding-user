@@ -3,8 +3,6 @@
 namespace Netizensgaurav\FilamentOnboarding\Pages;
 
 use BackedEnum;
-use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\ViewField;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -12,16 +10,18 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Schemas\Components\Section;
-use Illuminate\Support\Facades\Auth;
 use Filament\Schemas\Components\Wizard;
 use Filament\Schemas\Components\Wizard\Step;
+use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\HtmlString;
 
 class OnboardingWizard extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;
+    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedUsers;
 
     protected string $view = 'filament-onboarding::pages.onboarding-wizard';
 
@@ -91,7 +91,7 @@ class OnboardingWizard extends Page implements HasForms
                         ->schema([
                             ViewField::make('completion')
                                 ->view('filament-onboarding::components.completion-message')
-                                ->columnSpanFull()
+                                ->columnSpanFull(),
                         ]),
                 ]),
         ];
